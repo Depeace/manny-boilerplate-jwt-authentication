@@ -34,7 +34,7 @@ module.exports = {
         }
     },
     signIn: (req, res) => {
-        res.send("i'm hit");
+        res.send({token: tokenForUSer(req.user)});
     }
 }
 
