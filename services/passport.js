@@ -42,7 +42,31 @@ const jwtOptions = {
 
     // tells jwt strategy waht secret w used to encode the token
     // so that it can decode it
+    secretOrKey: config.secret
 
-}
+};
+
+// we are going to get  the payload argument from an incoming request
+const jwtLogin = new JwtStrategy(jwtOptions, async (payload, done) => {
+    try{
+       const user = await User.findById(payload.sub);
+       if(user) {
+           done(null, user);
+       }else {
+           done(null, false);
+       }
+    } catch(e){
+        done(e, false);
+    }
+});
+
+
+// this tells passport that we decleard these strategies.
+// the local login says we have a strategy called "local"
+// the jwt login says we have a strategy called "jwt"
+
+
+// when we say passport.authenticate('jwt, passport will look for a strategy called 'jwt)
+passport.use(localLogin);
 
 passport.use(localLogin);
